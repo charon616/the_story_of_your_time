@@ -19,43 +19,40 @@ export const sketch = (p) => {
   let walkerStatus = 1;
 
   p.setup = () => {
-    p.createCanvas(2800,100); // 横長のキャンバスを作成
+    p.createCanvas(p.windowWidth, 200); // 横長のキャンバスを作成
     p.frameRate(10);
 
-    humanSize = 60;
+    humanSize = 120;
     circleSize = p.width * 0.0125;
 
     human = new Human(0);
 
-    sc.roughness = 0.5;
+    sc.roughness = 2.5;
     sc.bowing = 2.0;
-    sc.maxOffset = 1.0;
+    sc.maxOffset = 2.0;
 
     const tmpVal = human.getValue();
     floorY = tmpVal[11].y;
 
-    p.strokeWeight(2);
-    p.background(255,99,71);
+    p.strokeWeight(1);
   };
 
   p.draw = () => {
-    p.background(255,99,71);
+
     p.push();
     p.translate(p.width / 2, p.height / 2 + 20);
 
     p.push();
-    
+    ox = p.frameCount*10;
 
-    // let translateX = p.constrain(ox - p.width / 2, -p.width/2, p.width/2);
-    let translateX = ox - p.width / 2;
-    console.log(translateX);
-    if(translateX >= (p.width/2 - 100)) {
-      // p.rotate(p.PI);
+    let translateX = p.constrain(ox - p.width / 2, -p.width/2, p.width/2);
+    if(translateX >= p.width/2) {
+      ox = 0;
+      walkerStatus = walkerStatus * -1;
     } else {
-      ox = p.frameCount*10;
+      walkerStatus = 1;
     }
-    
-    p.translate(translateX, -12);
+    p.translate(translateX, 0);
     human.draw();
     p.pop();
     p.pop();
@@ -110,8 +107,8 @@ export const sketch = (p) => {
       markers.forEach((m) => {
         if (m.desc == "Head") {
           p.fill(218, 219, 205);
-          p.stroke(218, 219, 205);
-          sc.scribbleEllipse(m.x, m.y, 16, 16);
+          p.stroke(0);
+          sc.scribbleEllipse(m.x, m.y, 20, 20);
   
           // switch (walkerStatus) {
           //   case -1:

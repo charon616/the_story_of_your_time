@@ -1,9 +1,11 @@
 "use client";
 
+import p5 from "p5";
 import Image from "next/image";
 import Link from "next/link";
+import { sketch } from "./lib/sketch_home"; // 外部ファイルからスケッチを読み込む
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Inter } from "next/font/google";
 
 const inter = Inter({
@@ -11,6 +13,7 @@ const inter = Inter({
 })
 
 export default function Home() {
+  const sketchRef = useRef(null);
   const router = useRouter()
   const [formData, setFormData] = useState({
     age: '24',
@@ -19,6 +22,12 @@ export default function Home() {
     country: 'UK'
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const p5Instance = new p5(sketch, sketchRef.current);
+        
+    return () => p5Instance.remove(); // クリーンアップ
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,8 +41,15 @@ export default function Home() {
     e.preventDefault();
     setLoading(true); // ローディング状態を開始
 
+    // calc bityear and deathyear
+    const age = parseInt(formData.age);
+    const currentYear = new Date().getFullYear();
+    const birthyear = currentYear - age;
+    const deathyear = currentYear + Math.floor(Math.random() * 100 - 20);
+
     // format formData to prompt
-    let prompt = JSON.stringify(formData);
+    let newFormData = { ...formData, "birthyear" : birthyear, "deathyear" : deathyear };
+    let prompt = JSON.stringify(newFormData);
 
     const res = await fetch('/api/openai', {
       method: 'POST',
@@ -48,8 +64,6 @@ export default function Home() {
     // combine data with formData
     data = { ...formData, ...data };
 
-    console.log(data);
-
     // データをlocalStorageに保存
     localStorage.setItem('resultData', JSON.stringify(data));
 
@@ -59,7 +73,7 @@ export default function Home() {
   }
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen p-8 pb-12 bg-image-home">
+    <div className="grid items-center justify-items-center min-h-screen p-8 pb-12">
       <main className="flex flex-col row-start-2 items-center sm:items-start">
         <div className="flex flex-col gap-4 items-center">
           <h1 className="text-6xl font-bold">The Story of Your Time</h1>
@@ -103,6 +117,8 @@ export default function Home() {
           </form>
         </div>
       </main>
+
+      <div ref={sketchRef} />
     </div>
   );
 }

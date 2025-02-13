@@ -39,10 +39,10 @@ main {
 }
 
 .timeline-container {
-  scrollbar-color: black transparent;
+  scrollbar-color: transparent transparent;
   scrollbar-width: thin;
 }
-
+/* 
 .timeline-line {
   position: absolute;
   top: 50%;
@@ -51,4 +51,4 @@ main {
   height: 2px;
   background-color: red;
   z-index: -1;
-}
+} */
