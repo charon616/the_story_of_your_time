@@ -3,7 +3,7 @@
 import p5 from "p5";
 import Image from "next/image";
 import Link from "next/link";
-import { sketch } from "./lib/sketch_home"; // 外部ファイルからスケッチを読み込む
+import { sketch } from "./lib/sketch_home"; // load sketch from external file
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { Inter } from "next/font/google";
@@ -26,7 +26,7 @@ export default function Home() {
   useEffect(() => {
     const p5Instance = new p5(sketch, sketchRef.current);
         
-    return () => p5Instance.remove(); // クリーンアップ
+    return () => p5Instance.remove(); // cleanup
   }, []);
 
   const handleChange = (e) => {
@@ -64,10 +64,10 @@ export default function Home() {
     // combine data with formData
     data = { ...formData, ...data };
 
-    // データをlocalStorageに保存
+    // save data to localStorage
     localStorage.setItem('resultData', JSON.stringify(data));
 
-    setLoading(false); // ローディング状態を終了
+    setLoading(false); // end loading
 
     router.push('/result');
   }
@@ -96,11 +96,23 @@ export default function Home() {
                 <option value="student">Student</option>
                 <option value="engineer">Engineer</option>
                 <option value="artist">Artist</option>
-                <option value="doctor">Doctor</option>
+                <option value="doctor">Designer</option>
+                <option value="doctor">Researcher</option>
                 <option value="other">Other</option>
               </select>
             </div>
             <div className="flex flex-col">
+              <label htmlFor="country" className="text-2xl font-medium">Country</label>
+              <input
+                name="country"
+                type="text"
+                value={formData.country}
+                onChange={handleChange}
+                className={`p-2 border rounded-md ${inter.className}`}
+                placeholder="Enter your country"
+              />
+            </div>
+            {/* <div className="flex flex-col">
               <label htmlFor="country" className="text-2xl font-medium">Country</label>
               <select name="country" value={formData.country} onChange={handleChange} className={`p-2 border rounded-md ${inter.className}`}>
                 <option value="uk">UK</option>
@@ -110,7 +122,7 @@ export default function Home() {
                 <option value="germany">Germany</option>
                 <option value="other">Other</option>
               </select>
-            </div>
+            </div> */}
             <button type="submit" className={`text-xl text-white px-4 py-2 rounded-full transition ${loading ? 'cursor-not-allowed bg-slate-700' : 'cursor-pointer bg-black hover:bg-slate-700'}`}>
               {loading ? 'Loading...' : "Let's Start 📜"}
             </button>

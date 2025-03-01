@@ -13,13 +13,13 @@ export const sketch = (p) => {
   let ox = 0;
   let prevOx = 0;
 
-  // -1 : 左へ進行
-  //  0 : 静止
-  //  1 : 右へ進行
+  // -1 : go left
+  //  0 : stop
+  //  1 : go right
   let walkerStatus = 1;
 
   p.setup = () => {
-    p.createCanvas(p.windowWidth, 200); // 横長のキャンバスを作成
+    p.createCanvas(p.windowWidth-48, 200); // make horizontal canvas
     p.frameRate(10);
 
     humanSize = 120;
@@ -109,22 +109,7 @@ export const sketch = (p) => {
           p.fill(218, 219, 205);
           p.stroke(0);
           sc.scribbleEllipse(m.x, m.y, 20, 20);
-  
-          // switch (walkerStatus) {
-          //   case -1:
-          //     sc.scribbleEllipse(m.x - 20, m.y - 15, 15, 15);
-          //     sc.scribbleLine(m.x - 40, m.y + 20, m.x - 10, m.y + 20);
-          //     break;
-          //   case 0:
-          //     sc.scribbleEllipse(m.x - 20, m.y - 15, 15, 15);
-          //     sc.scribbleEllipse(m.x + 20, m.y - 15, 15, 15);
-          //     sc.scribbleLine(m.x - 20, m.y + 20, m.x + 20, m.y + 20);
-          //     break;
-          //   case 1:
-          //     sc.scribbleEllipse(m.x + 20, m.y - 15, 15, 15);
-          //     sc.scribbleLine(m.x + 10, m.y + 20, m.x + 40, m.y + 20);
-          //     break;
-          // }
+
         }
       });
       p.pop();

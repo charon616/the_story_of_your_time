@@ -20,20 +20,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.bg-image-home {
-  background-image: url('/dan-cristian-padure-wpyQ_uSsQdU-unsplash.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.bg-image-result {
-  background-image: url('/kiwihug-qv05FvdE26k-unsplash.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
 main {
   padding: 1rem 1.5rem;
 }

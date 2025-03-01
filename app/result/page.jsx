@@ -53,7 +53,7 @@ export default function Result() {
 
       let distance = tl[tl.length - 1].year - tl[0].year;
       let startPos = 0;
-      let endPos = 1000;
+      let endPos = 3000;
       
       const updatedTimeline = tl.map((item, i) => {
         const pos = map(item.year - tl[0].year, 0, distance, startPos, endPos);
@@ -62,24 +62,29 @@ export default function Result() {
       setTimeline(updatedTimeline);
   
       setMinX(updatedTimeline[0].pos);
-      console.log(updatedTimeline[0].pos);
-      console.log(updatedTimeline[updatedTimeline.length - 1].pos);
       setMaxX(updatedTimeline[updatedTimeline.length - 1].pos);
+
+      // const p5Instance = new p5((p) => sketch(p, updatedTimeline, endPos), sketchRef.current);
     }
-
-
-    const p5Instance = new p5(sketch, sketchRef.current);
     
-    if (sceneRef.current) {
-      const cleanup = createScene(sceneRef.current);
-      return cleanup;
-    }
+    // if (sceneRef.current) {
+    //   const cleanup = createScene(sceneRef.current);
+    //   return cleanup;
+    // }
 
-    return () => p5Instance.remove(); // クリーンアップ
+    // return () => p5Instance.remove(); // クリーンアップ
   }, []);
+
+  useEffect(() => {
+    if (timeline && sketchRef.current) {
+      const p5Instance = new p5((p) => sketch(p, timeline, 3000), sketchRef.current);
+      return () => p5Instance.remove(); // クリーンアップ
+    }
+  }, [timeline]);
 
   return(
     <main>
+    <button>button</button>
       <div className="flex gap-4 mb-8">
         {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         <h1 className="text-4xl">{age} / {gender} / {country} </h1>
@@ -87,7 +92,8 @@ export default function Result() {
       </div>
       {/* <div ref={sceneRef} /> */}
 
-      <div className="timeline-container mb-20 w-full overflow-x-scroll">
+      <div ref={sketchRef} />
+      {/* <div className="timeline-container mb-20 w-full overflow-x-scroll">
         <div className="flex gap-2 items-end">
           {timeline.map((item, index) => (
             index % 2 === 0 ? 
@@ -96,8 +102,6 @@ export default function Result() {
             </div> : null
           ))}
         </div>
-        {/* <div className="timeline-line left-0 right-0 h-1 bg-black top-1/2"></div> */}
-        <div ref={sketchRef} />
         <div className="timeline-container flex gap-2 items-start">
           {timeline.map((item, index) => (
             index % 2 === 1 ? 
@@ -106,7 +110,7 @@ export default function Result() {
             </div> : null
           ))}
         </div>
-      </div>
+      </div> */}
     </main>
   )
 }
