@@ -57,8 +57,11 @@ The idea of people walking on the timeline was inspired by [Adam Robinson](https
 I rely on this data to assume the cause of death.
 - [https://www.cdc.gov/nchs/fastats/leading-causes-of-death.htm](https://www.cdc.gov/nchs/fastats/leading-causes-of-death.htm)
 
-##  Date
+## Date
 2025-03-01
 
 ## Author
 Karin Kiho
+
+## License
+This project is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/).
