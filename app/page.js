@@ -1,11 +1,10 @@
 "use client";
 
-// main page
-import p5 from "p5"; 
-import { sketch } from "./lib/sketch_home"; // load sketch from external file
 import { useRouter } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
-import { Inter } from "next/font/google";
+import { useState } from 'react'
+import { Inter } from 'next/font/google';
+import dynamic from 'next/dynamic'
+const StickHome = dynamic(() => import('./components/stick_home'), { ssr: false }); // use dynamic import for p5.js canvas because it's not SSR compatible
 
 const inter = Inter({
   weight: '400',
@@ -13,7 +12,6 @@ const inter = Inter({
 })
 
 export default function Home() {
-  const sketchRef = useRef(null); // p5 canvas ref
   const router = useRouter()
   const [formData, setFormData] = useState({ // default form data
     age: '24',
@@ -22,11 +20,6 @@ export default function Home() {
     country: 'UK'
   });
   const [loading, setLoading] = useState(false); // button loading state
-
-  // useEffect(() => {
-  //   const p5Instance = new p5(sketch, sketchRef.current); // create p5 instance
-  //   return () => p5Instance.remove(); // cleanup
-  // }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -167,7 +160,7 @@ export default function Home() {
         </div>
       </main>
 
-      <div ref={sketchRef} /> {/* p5 canvas for walking animation */}
+      <StickHome />
     </div>
   );
 }

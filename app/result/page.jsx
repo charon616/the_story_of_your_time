@@ -7,7 +7,7 @@ import { Londrina_Solid } from "next/font/google";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import dynamic from 'next/dynamic'
-const Stick = dynamic(() => import('../components/stick'), { ssr: false });
+const Stick = dynamic(() => import('../components/stick_result'), { ssr: false }); // use dynamic import for p5.js canvas because it's not SSR compatible
 
 const londrina = Londrina_Solid({
   weight: '300',

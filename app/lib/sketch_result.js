@@ -1,8 +1,7 @@
-import p5 from "p5";
 import { Scribble } from "./scribble";
 import { BMWalker } from "./bmwalker";
-import { RectBox, Ball, Boundary } from "./matterobj";
-import { Engine, Bodies, Composite, Vector, Body, Constraint, Mouse, MouseConstraint } from "matter-js";
+import { Engine } from "matter-js";
+import { Boundary, RectBox, Ball } from "./matterobj";
 
 export const sketch = (p, data, distance) => {
   // draw stick figure
@@ -23,6 +22,8 @@ export const sketch = (p, data, distance) => {
       const azimuth = Math.PI;
       const angularVelocity = 0;
       const elevation = Math.PI / 6;
+
+      // if the phaze is close to 1, the walker will stop
       const roll = p.map(phaze, 0, 1, 0, Math.PI / 2);
       this.bmw.setSpeed(p.map(phaze, 0, 1, 1, 0));
       this.bmw.setCameraParam(azimuth, angularVelocity, elevation, roll);
@@ -36,24 +37,70 @@ export const sketch = (p, data, distance) => {
       // draw the lines
       p.stroke(0);
       p.strokeWeight(5);
-      lineMarkers.forEach((m) => {
-        let delta;
-        if (m[0].i == 0) {
-          delta = 95 / 2;
-        } else {
-          delta = 0;
-        }
-        sc.scribbleLine(m[0].x, m[0].y + delta, m[1].x, m[1].y);
-      });
 
-      // draw head
-      p.fill(255);
-      p.noStroke();
-      markers.forEach((m) => {
-        if (m.desc == "Head") {
-          sc.scribbleEllipse(m.x, m.y-10, 72, 72);
+      if(phaze >= 1){
+        if(!isSplit){
+          // if the walker stops, split lines and collapse them
+          isSplit = true;
+          sc.roughness = 1.0;
+          sc.bowing = 2;
+          sc.maxOffset = 3.0;
+
+          lineMarkers.forEach((m) => {
+            let delta;
+            if (m[0].i == 0) {
+              delta = 95 / 2;
+            } else {
+              delta = 0;
+            }
+            let d = p.dist(m[0].x, m[0].y, m[1].x, m[1].y);
+            let angle = p.atan2(m[1].y - m[0].y, m[1].x - m[0].x);
+
+            matterParts.push({ type: 'rect', object: new RectBox(m[0].x, m[0].y, d, 5, angle, engine, p, sc)});
+          });
+
+          markers.forEach((m) => {
+            if (m.desc == "Head") {
+              matterParts.push({ type: 'circle', object: new Ball(m.x, m.y-10, 72, engine, p, sc)});
+            }
+          });
         }
-      });
+
+        if(matterParts.length > 0){
+          // draw the collapsed figure
+          for(let part of matterParts) {
+            if(part.type == 'circle') {
+              p.fill(255);
+              p.noStroke();
+              part.object.show();
+            } else {
+              p.fill(0);
+              p.noStroke();
+              part.object.show();
+            }
+          }
+        }
+      } else {
+        // draw body
+        lineMarkers.forEach((m) => {
+          let delta;
+          if (m[0].i == 0) {
+            delta = 95 / 2;
+          } else {
+            delta = 0;
+          }
+          sc.scribbleLine(m[0].x, m[0].y + delta, m[1].x, m[1].y);
+        });
+  
+        // draw head
+        p.fill(255);
+        p.noStroke();
+        markers.forEach((m) => {
+          if (m.desc == "Head") {
+            sc.scribbleEllipse(m.x, m.y-10, 72, 72);
+          }
+        });
+      }
 
       p.pop();
     }
@@ -72,6 +119,8 @@ export const sketch = (p, data, distance) => {
   let ground;
 
   let sc = new Scribble(p);
+
+  let showFinishText = false;
 
   let offsetZ = 0; // counter for camera movement
   let scrollAllowed = false; // flag for user to scroll
@@ -92,7 +141,7 @@ export const sketch = (p, data, distance) => {
     human = new Human();
 
     engine = Engine.create();
-    ground = new Boundary(0, 100, p.width, 20, engine);
+    ground = new Boundary(0, 100, p.width, 20, engine, p);
 
     // settings for the scribble
     sc.roughness = 1.5;
@@ -171,27 +220,37 @@ export const sketch = (p, data, distance) => {
 
     // if the camera reaches the end of the timeline, the user can scroll and draw the arrow for scrolling
     if (phaze >= 1) {
-      p.fill(0);
-      p.noStroke();
-      p.textSize(50);
-      p.textAlign(p.CENTER, p.CENTER);
-      p.textFont(font_body);
-      p.text("SCROLL", 0, -250);
-      
-      p.noFill();
-      p.stroke(0);
-      p.strokeWeight(7);
-      p.translate(0, 80, 0);
-      let arrowSize = 80;
-      let arrowX = 0;
-      let arrowY = -humanSize / 2 - 50;
+      if(!showFinishText){
+        // show the text "SCROLL" after the stick figure collapses and 300ms later
+        setTimeout(() => {
+          showFinishText = true;
+        }, 700);
+      }
+      if(showFinishText){
+        p.fill(0);
+        p.noStroke();
+        p.textSize(50);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.textFont(font_body);
+        p.text("SCROLL", 0, -250);
+        
+        p.noFill();
+        p.stroke(0);
+        p.strokeWeight(7);
+        p.translate(0, 80, 0);
+        let arrowSize = 80;
+        let arrowX = 0;
+        let arrowY = -humanSize / 2 - 50;
 
-      p.line(arrowX, arrowY, arrowX, arrowY - arrowSize); // draw center line
-      p.line(arrowX, arrowY, arrowX - arrowSize / 2, arrowY - arrowSize + arrowSize / 2); // draw head
-      p.line(arrowX, arrowY, arrowX + arrowSize / 2, arrowY - arrowSize + arrowSize / 2); // draw head
+        p.line(arrowX, arrowY, arrowX, arrowY - arrowSize); // draw center line
+        p.line(arrowX, arrowY, arrowX - arrowSize / 2, arrowY - arrowSize + arrowSize / 2); // draw head
+        p.line(arrowX, arrowY, arrowX + arrowSize / 2, arrowY - arrowSize + arrowSize / 2); // draw head
+      }
     }
     p.pop();
     p.pop();
+
+    Engine.update(engine); // update the matter.js engine
   };
 
   p.mouseWheel= (event) => {
