@@ -2,7 +2,11 @@
 
 This is a simple life simulator using the OpenAI API that predicts a person's life timeline from birth to death based on their profile information. The result is then converted into a loose animation using a stick figure.
 
+[DEMO](http://story-of-your-time.lab.karinkiho.com/)
+
 [![thumbnail](/thumbnail.png)](https://youtu.be/4lhN_LmOMK8)
+
+![main](/main.png)
 
 ## Installation
 This project uses [pnpm](https://pnpm.io/), but you can also use npm or yarn.
