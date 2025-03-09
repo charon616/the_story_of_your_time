@@ -32,7 +32,6 @@ This project utilized the following technologies:
 - [OpenAI API](https://platform.openai.com/)
 - [p5.js](https://p5js.org/)
 - [p5.scribble.js](https://github.com/generative-light/p5.scribble.js/)
-- [matter.js](https://github.com/liabru/matter-js)
 - [BMWalker.js](https://github.com/tetunori/BMWalker.js)
 - [FontAwesome](https://fontawesome.com/)
 - [Tailwind CSS](https://tailwindcss.com/)

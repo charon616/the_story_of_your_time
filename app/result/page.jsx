@@ -15,6 +15,7 @@ const londrina = Londrina_Solid({
 })
 
 export default function Result() {
+  const router = useRouter();
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState(null);
   const [occupation, setOccupation] = useState(null);

@@ -1,7 +1,6 @@
 "use client";
 
 // main page
-
 import p5 from "p5"; 
 import { sketch } from "./lib/sketch_home"; // load sketch from external file
 import { useRouter } from 'next/navigation'
@@ -24,10 +23,10 @@ export default function Home() {
   });
   const [loading, setLoading] = useState(false); // button loading state
 
-  useEffect(() => {
-    const p5Instance = new p5(sketch, sketchRef.current); // create p5 instance
-    return () => p5Instance.remove(); // cleanup
-  }, []);
+  // useEffect(() => {
+  //   const p5Instance = new p5(sketch, sketchRef.current); // create p5 instance
+  //   return () => p5Instance.remove(); // cleanup
+  // }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
