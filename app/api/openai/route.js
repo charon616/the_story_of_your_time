@@ -12,7 +12,7 @@ export async function POST(request) {
 
   // return the response in JSON format
   const output = await openai.chat.completions.create({
-    model: "gpt-4o-2024-08-06",
+    model: "o3-mini-2025-01-31",
     messages: [
       { 
         role: "developer", 
