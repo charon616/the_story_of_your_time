@@ -167,7 +167,10 @@ export const sketch = (p, data, distance) => {
       cam.setPosition(0, -200, 1000 + offsetZ);
       camz = 1000 + offsetZ;
     }
-    p.orbitControl();
+    // Enable orbitControl only if not on a mobile device
+    if (!isMobileDevice()) {
+      p.orbitControl();
+    }
 
     // draw street side lines
     p.strokeWeight(10);
@@ -261,6 +264,30 @@ export const sketch = (p, data, distance) => {
     }
   }
 
+  p.touchMoved = (event) => {
+    // Get the canvas element and its bounding rectangle
+    const canvas = document.querySelector('canvas');
+    const rect = canvas.getBoundingClientRect();
+  
+    // Check if the touch is within the canvas boundaries
+    if (
+      event.touches[0].clientX >= rect.left &&
+      event.touches[0].clientX <= rect.right &&
+      event.touches[0].clientY >= rect.top &&
+      event.touches[0].clientY <= rect.bottom
+    ) {
+      if (scrollAllowed) {
+        // Handle vertical scroll within the canvas
+        let scrollAmount = p.mouseY - p.pmouseY;
+        camz -= scrollAmount;
+      }
+      return false; // Prevent default scrolling inside the canvas
+    }
+  
+    // Allow default scrolling outside the canvas
+    return true;
+  };
+
   p.windowResized= () => {
     p.resizeCanvas(p.windowWidth-48, p.windowHeight*2/3);
   }
@@ -289,7 +316,7 @@ export const sketch = (p, data, distance) => {
     p.rect(-20, -50, 300, rectHeight, 16);
   
     // draw text
-    p.translate(0, 0, 0.1);
+    p.translate(0, 0, 10);
     p.fill(0);
     p.textSize(50);
     p.textAlign(p.TOP, p.LEFT);
@@ -300,5 +327,10 @@ export const sketch = (p, data, distance) => {
     p.textAlign(p.TOP, p.LEFT);
     p.text(body, 0, 40, w-24); // description
     p.pop();
+  }
+
+  // Function to detect if the device is a mobile device
+  function isMobileDevice() {
+    return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 };

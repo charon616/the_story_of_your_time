@@ -68,11 +68,11 @@ export default function Result() {
   }
 
   return(
-    <main>
-      <div className="flex gap-4 mb-8">
+    <main> 
+      <div className="flex gap-4 mb-8 md:flex-wrap">
         <button onClick={handleBackToHome} className="bg-black rounded-full inline-block px-4 py-2 max-h-20 text-[#dadbcd]"><FontAwesomeIcon icon={faArrowLeft} /></button>
         <h1 className="text-4xl">{age} / {gender} / {occupation} / {country} </h1>
-        <p className={`w-[40rem] whitespace-normal inline-block text-xl ${londrina.className}`}>{biography}</p>
+        <p className={`w-[40rem] whitespace-normal inline-block text-xl md:mb-2 ${londrina.className}`}>{biography}</p>
       </div>
       <Stick timeline={timeline} />
     </main>
