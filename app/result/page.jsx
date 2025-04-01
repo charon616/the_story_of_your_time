@@ -68,7 +68,7 @@ export default function Result() {
   }
 
   return(
-    <main> 
+    <main className='bg-[#DADBCD] text-black'> 
       <div className="flex gap-4 mb-8 md:flex-wrap">
         <button onClick={handleBackToHome} className="bg-black rounded-full inline-block px-4 py-2 max-h-20 text-[#dadbcd]"><FontAwesomeIcon icon={faArrowLeft} /></button>
         <h1 className="text-4xl">{age} / {gender} / {occupation} / {country} </h1>

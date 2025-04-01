@@ -114,7 +114,7 @@ export default function Home() {
   }
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen p-8 pb-12">
+    <div className="grid items-center justify-items-center min-h-screen p-8 pb-12 bg-[#DADBCD] text-black">
       <main className="flex flex-col row-start-2 items-center sm:items-start">
         <div className="flex flex-col gap-4 items-center">
           <h1 className="text-6xl font-bold">The Story of Your Time</h1>
